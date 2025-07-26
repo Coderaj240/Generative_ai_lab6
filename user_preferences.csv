@@ -1,0 +1,9 @@
+user_id,communication_preference,interface_theme,notification_settings
+u1,email,dark,standard
+u2,sms,light,minimal
+u3,email,light,standard
+u4,push,dark,aggressive
+u5,email,classic,minimal
+u6,email,dark,standard
+u7,sms,dark,standard
+u8,push,light,minimal

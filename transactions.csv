@@ -1,0 +1,11 @@
+transaction_id,user_id,transaction_date,amount,platform
+t001,u1,7/10/2025,250,web
+t002,u1,7/15/2025,300,mobile
+t003,u2,6/18/2025,50,web
+t004,u3,7/19/2025,400,web
+t005,u4,7/2/2025,75,mobile
+t006,u5,5/30/2025,60,mobile
+t007,u6,7/23/2025,700,desktop
+t008,u7,7/10/2025,200,web
+t009,u7,7/11/2025,150,web
+t010,u8,6/10/2025,45,mobile

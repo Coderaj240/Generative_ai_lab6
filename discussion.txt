@@ -1,0 +1,35 @@
+3. Discussion Points:
+
+1. How were percentile calculations handled?
+- The query estimates percentiles by leveraging a workaround since SQLite doesn’t support percentile functions like PERCENT_RANK() directly. It first computes total spending per user and ranks them in descending order. Then, it selects the top 20% of users by limiting the number of records based on the total user count multiplied by 0.2. The lowest spending value within this top slice becomes the threshold for identifying high-value users. While this isn't a true percentile function, it effectively isolates the top spenders using SQLite’s capabilities.
+
+2. What approaches to date filtering were used?
+- In terms of date filtering, even though it’s not applied in the user preference trends query itself, it plays a key role in earlier queries that identify active users. Those queries use SQLite’s date function DATE('now', '-30 days') to filter records within the last month. This method ensures that only users who have recently logged in or interacted with the system are considered for further segmentation, making the analysis more relevant to current behavior.
+
+3. How was the query optimized, CTE, subquery etc…?
+-The query structure uses Common Table Expressions (CTEs) to organize each logical part of the analysis. By separating the steps—like computing user spend, defining a cutoff, and filtering users—CTEs make the SQL easier to understand and maintain. Joins and grouping are done efficiently, only after narrowing the dataset to high-value users. This approach reduces unnecessary computation and focuses analysis on the most important user segment when exploring preference patterns.
+
+
+1. Retail Inventory 
+Discussion Questions to Answer:
+
+How did different prompts handle date calculations?
+-The code handles date calculations by transforming the last_restock_date column into datetime objects using the pd.to_datetime() function, ensuring consistency and ease of use when working with date data. Invalid or missing dates are substituted with a default value of 2000-01-01, ensuring the calculations run smoothly without errors. When predicting potential stockouts, the predict_stockouts() function calculates the estimated days of stock remaining by dividing the stock level by the daily sales. This method gives an accurate forecast, relying on products with sufficient sales data to make predictions without introducing any inconsistencies.
+
+What visualization approaches were suggested?
+-For data visualization, the code utilizes Seaborn and Matplotlib to create meaningful plots that provide insights into inventory performance. The first plot is a histogram that shows the distribution of inventory turnover, revealing the rate at which different products are sold. The second plot is a bar chart that highlights slow-moving items, which are identified by a low turnover rate. This helps inventory managers focus on products that may require adjustments in their sales strategies or restocking plans. The third visualization is a bar plot displaying products at risk of stockouts, which helps prioritize products with low stock levels and long supplier lead times.
+
+How was error handling implemented?
+-Error handling is effectively implemented throughout the code, particularly in the validate_inventory_data() function. It checks for missing required columns and raises an error if any are found. Missing or invalid data is addressed by filling missing values with zeros or using the median of the column for numerical data, such as supplier lead time and unit cost. Invalid dates are replaced with a default date to maintain data integrity. These error handling techniques ensure the dataset remains clean, preventing any issues that could distort calculations or visualizations related to inventory turnover, stockouts, and slow-moving products.
+
+2. Website Analysis debug
+
+How did different prompts approach error identification?
+-The code handles error identification systematically by first checking whether the required columns are present in the dataset. It does this by comparing the actual columns in the DataFrame to a predefined set of necessary columns. If any are missing, it raises a ValueError with a message indicating which columns are absent. Furthermore, to ensure the correct data types, it converts the timestamp column to a datetime object and the duration and page_views columns to numeric values. Any errors encountered during this conversion process are handled by coercing invalid entries to NaT or NaN, and then removing rows with critical missing values. This proactive approach ensures that the data used in further analysis is clean and consistent.
+
+What validation methods were suggested?
+-For data validation, the code employs multiple strategies to ensure the integrity of the dataset. Initially, it verifies that all essential columns are present, raising an error if any are missing. The next step involves ensuring that the date and numeric columns are properly formatted by converting them into the appropriate types. If there are any issues in this conversion, the code applies coercion to handle invalid data entries. Finally, any rows containing missing or invalid data in the essential columns are dropped, which helps in maintaining the accuracy of the dataset. These validation techniques ensure that the dataset is both reliable and ready for further processing without introducing errors into the analysis.
+
+
+How was time handling improved?
+-When it comes to handling time-related data, the code uses the pd.to_datetime() function to standardize the timestamp column, ensuring that it is formatted as a datetime object. This approach simplifies time-based operations such as grouping and filtering sessions based on their timestamps. By properly converting and handling time data, the code enables accurate analysis of user engagement over different time intervals, such as session duration and bounce rate. Moreover, time-based calculations like summing the session durations for each user are performed correctly, providing valuable insights into user behavior. This method improves time handling by ensuring that all time-related operations are accurate and consistent throughout the analysis.
